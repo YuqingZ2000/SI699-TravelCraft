@@ -15,6 +15,7 @@
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href={{url_for("static",filename="vendor/bootstrap/css/bootstrap.min.css")}} rel="stylesheet">
@@ -114,19 +115,57 @@
   <section id="hero">
     <div class="hero-container">
       <h1>Welcome to TravelCraft</h1>
+      <h2>Crafting Harmony, Tailoring Your Journey</h2>
       <form action="{{url_for('read_form')}}" method="post" role="form" class="user-keyword-input">
-        <div class="row no-gutters">
-          <div class="col-md-6 form-group pr-md-1">
+        <div class="form-container">
+          <div class="form-group form-description"> <!-- Description -->
             <input type="text" name="description" class="form-control" id="description" placeholder="Description of Your Destination" required>
           </div>
-          <div class="col-md-6 form-group pr-md-1">
-            <input type="text" name = 'departure' class="form-control" id="autocompleteDatalist" data-datalist="departure-city" placeholder="Departure" />
-            <datalist id="departure-city">
-              {% for city in departure_list %}
-                <option>{{city}}</option>
-              {% endfor %}
-            </datalist>
+          <div class="form-group form-dates"> <!-- Departure Date -->
+            <input type="date" name="departure_date" class="form-control" id="departure_date" required>
           </div>
+          <div id="departure-city-container" class="form-group form-departure1"> <!-- Departure City 1 -->
+            <div class="departure-city-field">
+              <input type="text" name="departure1" class="form-control" id="autocompleteDatalist" data-datalist="departure-city" placeholder="Departure City 1" required/>
+              <datalist id="departure-city">
+                {% for city in departure_list %}
+                  <option>{{city}}</option>
+                {% endfor %}
+              </datalist>
+            </div>
+            <button type="button" id="add-departure-city">+</button>
+            <button type="button" id="remove-departure-city">-</button>
+          </div>
+          <div id="additional-departure-cities" class="form-group form-departure-more"></div> <!-- More Departure Cities -->
+          
+          <div class="form-group form-method"> <!-- Travel Method -->
+            <select name="travel_method" class="form-control" id="travel_method" required>
+              <option value="">Travel Method</option>
+              <option value="Airplane">Airplane</option>
+              <option value="Car">Car</option>
+            </select>
+          </div>
+          <div class="form-group form-driving">  <!-- Driving Time -->
+            <select name="driving_time" class="form-control" id="driving_time" required>
+              <option value="">Driving Time</option>
+              <option value="0-3 hours">0-3 hours</option>
+              <option value="3-5 hours">3-5 hours</option>
+              <option value="5-8 hours">5-8 hours</option>
+              <option value="8-10 hours">8-10 hours</option>
+              <option value="More than 10 hours">More than 10 hours</option>
+            </select>
+          </div>
+          <div class="form-group form-hotel"> <!-- Hotel Options -->
+            <input type="checkbox" id="2-star" name="hotel_option" value="2-star">
+            <label for="2-star">2-star</label>
+            <input type="checkbox" id="3-star" name="hotel_option" value="3-star">
+            <label for="3-star">3-star</label>
+            <input type="checkbox" id="4-star" name="hotel_option" value="4-star">
+            <label for="4-star">4-star</label>
+            <input type="checkbox" id="5-star" name="hotel_option" value="5-star">
+            <label for="5-star">5-star</label>
+          </div>
+        
         </div>
 
         <div class="my-3">
@@ -135,33 +174,41 @@
         </div>
         <div class="text-center"><button type="submit">Search</button></div>
       </form>
-    </div>
-
+      
     </div>
   </section><!-- #hero -->
-
-  <section id = 'res' style = >
+  
+  <br><br>
+  <section id = 'res' >
     <div id = "recommended-cities" class = 'container'>
       {% if recommended_cities %}
-      {% for city,description in zip(recommended_cities,city_descriptions) %}
-        <div class="card" id = 'city-card'>
-          <h5 class="card-header"></h5>
-          <div class="card-body">
-            <h5 class="card-title">{{city}}</h5>
-            <p class="card-text">{{description}}</p>
-          </div>
+      {% for city, description, rank in zip(recommended_cities, city_descriptions, city_rank) %} <!-- Updated! -->
+        <div class="city-card" id = 'city-card'>
+          <p class="city-rank">{{ rank }}</p>  <!-- Updated! -->
+          <p class="city-score">Score:</p>
+          <h2 class="city-title">{{city}}</h2>
+          <p class="city-pop">Population:</p>
+          <p class="city-hotel">Average [x-star] hotel price per night in [month]:</p>
+          <p class="city-des">{{description}}</p>
+          
         </div>
-      {% endfor%}
+      {% endfor %}
       {% endif %}
     </div>
   </section><!-- #recommendedcity -->
+  
+  <footer> <!-- Updated! -->
+    SI699 Project 2024    
+    &copy; Data Venturers
+  </footer>
 
   <!-- Vendor JS Files -->
   <script src={{url_for("static",filename="vendor/bootstrap/js/bootstrap.bundle.min.js")}}></script>
 
   <!-- Template Main JS File -->
   <script src={{url_for("static",filename="js/main.js")}}></script>
-
+  
+  
 </body>
 
 </html>
