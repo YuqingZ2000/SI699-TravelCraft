@@ -57,13 +57,15 @@ def read_form(city_descriptions = city_descriptions):
         top_5_cities = city_descriptions.iloc[top_5_idx]
         recommended_cities = top_5_cities['city'].to_list()
         city_descriptions = top_5_cities['description'].to_list()
+        city_rank = list(range(1, len(recommended_cities) + 1)) ### Updated!
     else:
         recommended_cities = None
         city_descriptions = None
+        city_rank = None ### Updated!
 
-    ## Return the extracted information
+    ## Return the extracted information ### Updated!
     return render_template('index.html',departure_list = departure_list['city'].to_list(),
-                           recommended_cities = recommended_cities,city_descriptions = city_descriptions,
+                           recommended_cities = recommended_cities,city_descriptions = city_descriptions, city_rank = city_rank, 
                            zip = zip)
 
 # Press the green button in the gutter to run the script.
