@@ -184,7 +184,7 @@
       {% if recommended_cities %}
       {% for city, description, rank in zip(recommended_cities, city_descriptions, city_rank) %} <!-- Updated! -->
         <div class="city-card" id = 'city-card'>
-          <p class="city-rank">{{ rank }}</p>  <!-- Updated! -->
+          <p class="city-rank">{{ rank }}</p>  
           <p class="city-score">Score:</p>
           <h2 class="city-title">{{city}}</h2>
           <p class="city-pop">Population:</p>
@@ -197,7 +197,7 @@
     </div>
   </section><!-- #recommendedcity -->
   
-  <footer> <!-- Updated! -->
+  <footer> 
     SI699 Project 2024    
     &copy; Data Venturers
   </footer>
