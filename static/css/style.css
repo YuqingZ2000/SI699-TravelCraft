@@ -570,13 +570,13 @@ h6,
   }
 }
 
-/* Updated! */
+
 #hero .form-container {
   display: grid;
 }
 
 #hero .form-group {
-  margin-bottom: 10px; /* Adjust as needed */
+  margin-bottom: 10px; 
 }
 
 #hero .form-description {
@@ -667,7 +667,7 @@ h6,
 }
 
 /*--------------------------------------------------------------
-# res Section Updated!
+# res Section 
 --------------------------------------------------------------*/
 #res #recommended-cities {
   display: flex;
@@ -723,7 +723,7 @@ h6,
 }
 
 /*--------------------------------------------------------------
-# Footer Section Updated!
+# Footer Section 
 --------------------------------------------------------------*/
 footer {
   text-align: center;
