@@ -45,7 +45,7 @@ def index():
 
 
 # `read-form` endpoint
-@app.route('/read_form', methods=['POST'])
+@app.route('/read_form', methods=['POST','GET']) 
 def read_form(city_descriptions = city_descriptions):
     # Get the form data as Python ImmutableDict datatype
     data = request.form
@@ -57,13 +57,13 @@ def read_form(city_descriptions = city_descriptions):
         top_5_cities = city_descriptions.iloc[top_5_idx]
         recommended_cities = top_5_cities['city'].to_list()
         city_descriptions = top_5_cities['description'].to_list()
-        city_rank = list(range(1, len(recommended_cities) + 1)) ### Updated!
+        city_rank = list(range(1, len(recommended_cities) + 1)) 
     else:
         recommended_cities = None
         city_descriptions = None
-        city_rank = None ### Updated!
+        city_rank = None 
 
-    ## Return the extracted information ### Updated!
+    ## Return the extracted information 
     return render_template('index.html',departure_list = departure_list['city'].to_list(),
                            recommended_cities = recommended_cities,city_descriptions = city_descriptions, city_rank = city_rank, 
                            zip = zip)
