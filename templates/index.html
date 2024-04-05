@@ -50,8 +50,10 @@
       highlightTyped: true,
       onSelectItem: console.log,
     });
-
-    new Autocomplete(document.getElementById("autocompleteDatalist"), opts);
+    const autocompletes = document.querySelectorAll(".autocompleteDatalist");
+    autocompletes.forEach(input => {
+      new Autocomplete(input, opts);
+    });
   </script>
 <style>
   /* highlightTyped use mark */
@@ -119,7 +121,7 @@
           </div>
           <div id="departure-city-container" class="form-group form-departure1"> <!-- Departure City 1 -->
             <div class="departure-city-field">
-              <input type="text" name="departure1" class="form-control" id="autocompleteDatalist" data-datalist="departure-city" placeholder="Departure City 1" required/>
+              <input type="text" name="departure1" class="form-control autocompleteDatalist" id="autocompleteDatalist1"  data-datalist="departure-city" placeholder="Departure City 1" required/>
               <datalist id="departure-city">
                 {% for city in departure_list %}
                   <option>{{city}}</option>
@@ -200,7 +202,7 @@
   <script src={{url_for("static",filename="vendor/bootstrap/js/bootstrap.bundle.min.js")}}></script>
 
   <!-- Template Main JS File -->
-  <script src={{url_for("static",filename="js/main.js")}}></script>
+  <script type = 'module' src={{url_for("static",filename="js/main.js")}}></script>
   
   
 </body>

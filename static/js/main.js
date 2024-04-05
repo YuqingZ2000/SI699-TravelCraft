@@ -5,6 +5,32 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
+import Autocomplete from "https://cdn.jsdelivr.net/gh/lekoala/bootstrap5-autocomplete@master/autocomplete.js";
+    const opts = {
+      onSelectItem: console.log,
+    };
+    var src = [];
+    for (let i = 0; i < 50; i++) {
+      src.push({
+        title: "Option " + i,
+        id: "opt" + i,
+        data: {
+          key: i,
+        },
+      });
+    }
+    Autocomplete.init("input.autocomplete", {
+      items: src,
+      valueField: "id",
+      labelField: "title",
+      highlightTyped: true,
+      onSelectItem: console.log,
+    });
+    const autocompletes = document.querySelectorAll(".autocompleteDatalist");
+    autocompletes.forEach(input => {
+      new Autocomplete(input, opts);
+    });
+
 (function() {
   "use strict";
 
@@ -104,15 +130,14 @@ document.addEventListener('DOMContentLoaded', function() {
       newDepartureCity.classList.add('form-departure' + departureCityCount);
       newDepartureCity.innerHTML = `
           <div class="departure-city-field">
-              <input type="text" name="departure${departureCityCount}" class="form-control" id="autocompleteDatalist${departureCityCount}" data-datalist="departure-city" placeholder="Departure City ${departureCityCount}" />
-              <datalist id="departure-city${departureCityCount}">
-                  {% for city in departure_list %}
-                  <option>{{city}}</option>
-                  {% endfor %}
-              </datalist>
+              <input type="text" name="departure${departureCityCount}" class="form-control autocompleteDatalist" id="autocompleteDatalist${departureCityCount}" data-datalist="departure-city" placeholder="Departure City ${departureCityCount}" />
           </div>
       `;
       document.getElementById('additional-departure-cities').appendChild(newDepartureCity);
+      var newInput = newDepartureCity.querySelector('.autocompleteDatalist');
+      new Autocomplete(newInput, {
+        onSelectItem: console.log, // You can add your custom onSelectItem function here
+    });
   }
 
   document.getElementById('add-departure-city').addEventListener('click', function() {
