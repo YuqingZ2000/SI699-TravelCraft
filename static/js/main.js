@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
       newDepartureCity.classList.add('form-departure' + departureCityCount);
       newDepartureCity.innerHTML = `
           <div class="departure-city-field">
-              <input type="text" name="departure${departureCityCount}" class="form-control autocompleteDatalist" id="autocompleteDatalist${departureCityCount}" data-datalist="departure-city" placeholder="Departure City ${departureCityCount}" />
+              <input type="text" name="departureCity" class="form-control autocompleteDatalist" id="autocompleteDatalist${departureCityCount}" data-datalist="departure-city" placeholder="Departure City ${departureCityCount}" />
           </div>
       `;
       document.getElementById('additional-departure-cities').appendChild(newDepartureCity);

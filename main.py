@@ -28,9 +28,10 @@ def get_embedding(text):
 
 
 departure_list = pd.read_csv('static/data/US_cities_latlng.csv')
-city_descriptions = pd.read_csv('static/data/city_descriptions.csv',index_col = 0)
+city_descriptions = pd.read_csv('static/data/merged_description_city_coded.csv',index_col = 0)
 city_embeddings = pd.read_csv('static/data/city_embeddings.csv',index_col = 0)
-
+city_code = pd.read_csv('static/data/city_code.csv',index_col = 0)
+city_distance = pd.read_csv('static/data/distance_coded.csv',index_col = 0)
 app = Flask(__name__)
 
 
@@ -40,33 +41,57 @@ app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def index():
     ## Display the HTML form template
-    return render_template('index.html',departure_list = departure_list['city'].to_list(),
-                           recommended_cities = None,city_descriptions = None)
+    return render_template('index.html',departure_list = departure_list,
+                           recommended_cities = None,city_descriptions = None,zip = zip)
 
 
 # `read-form` endpoint
 @app.route('/read_form', methods=['POST','GET']) 
 def read_form(city_descriptions = city_descriptions):
     # Get the form data as Python ImmutableDict datatype
-    data = request.form
-    if data['description']:
-        keyword_embedding = get_embedding(data['description'])
-        similarities = [1 - cosine(keyword_embedding, city_embedding) for index, city_embedding in
-                        city_embeddings.iterrows()]
-        top_5_idx = np.argsort(similarities)[-5:]
-        top_5_cities = city_descriptions.iloc[top_5_idx]
-        recommended_cities = top_5_cities['city'].to_list()
-        city_descriptions = top_5_cities['description'].to_list()
-        city_rank = list(range(1, len(recommended_cities) + 1)) 
-    else:
-        recommended_cities = None
-        city_descriptions = None
-        city_rank = None 
+    if request.method == 'POST':
+        data = request.form
+        top_num = 25
+        departure_date = data['departure_date']
+        departure_cities = data.getlist('departureCity')
+        departure_cities_code = departure_list[departure_list['city_state'].isin(departure_cities)]['code'].to_list()
+        travel_method = data['travel_method']
+        hotel_option = data.getlist('hotel_option')
+        if data['description']:
+            keyword_embedding = get_embedding(data['description'])
+            city_embeddings['similarities'] = city_embeddings.apply(lambda x: 1 - cosine(keyword_embedding, x), axis=1)
+            top_city_idx = city_embeddings.sort_values('similarities',ascending = False)[:top_num].index.to_list()
+            top_cities = city_descriptions.loc[top_city_idx]
+        else:
+            recommended_cities = None
+            city_descriptions = None
+            city_rank = None
+        if travel_method == 'Car':
+            driving_time = int(data['driving_time'])
+            selected_recommended_cities = city_distance[city_distance['source_code'].isin(departure_cities_code) &
+                                                      city_distance['destination_code'].isin(top_cities.index) &
+                                                      (city_distance['Duration_val_hour'] < driving_time+2)]
+            selected_recommended_cities = selected_recommended_cities.groupby('destination_code').count()
+            selected_recommenede_cities = selected_recommended_cities[selected_recommended_cities['source_code']==len(departure_cities_code)].index
+            selected_top_cities = top_cities.loc[selected_recommenede_cities]
+            recommended_cities = selected_top_cities['city'].to_list()
+            print(f'cities:{recommended_cities}')
+            city_descriptions = selected_top_cities['description'].to_list()
+            city_rank = [x for x in range(1,len(selected_top_cities)+1)]
+        else:
+            recommended_cities = top_cities[:10]['city'].to_list()
+            city_descriptions = top_cities[:10]['description'].to_list()
+            city_rank = [x for x in range(1,11)]
+        return render_template('index.html', departure_list=departure_list,
+                                recommended_cities=recommended_cities, city_descriptions=city_descriptions,
+                                city_rank=city_rank,enumerate = enumerate,
+                                zip = zip)
 
-    ## Return the extracted information 
-    return render_template('index.html',departure_list = departure_list['city'].to_list(),
-                           recommended_cities = recommended_cities,city_descriptions = city_descriptions, city_rank = city_rank, 
-                           zip = zip)
+    elif request.method == 'GET':
+        return render_template('index.html', departure_list=departure_list,
+                               recommended_cities=None, city_descriptions=None, zip=zip)
+
+
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

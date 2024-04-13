@@ -121,9 +121,9 @@
           </div>
           <div id="departure-city-container" class="form-group form-departure1"> <!-- Departure City 1 -->
             <div class="departure-city-field">
-              <input type="text" name="departure1" class="form-control autocompleteDatalist" id="autocompleteDatalist1"  data-datalist="departure-city" placeholder="Departure City 1" required/>
+              <input type="text" name="departureCity" class="form-control autocompleteDatalist" id="autocompleteDatalist1"  data-datalist="departure-city" placeholder="Departure City 1" required/>
               <datalist id="departure-city">
-                {% for city in departure_list %}
+                {% for city in departure_list['city_state']%}
                   <option>{{city}}</option>
                 {% endfor %}
               </datalist>
@@ -143,22 +143,22 @@
           <div class="form-group form-driving">  <!-- Driving Time -->
             <select name="driving_time" class="form-control" id="driving_time" required>
               <option value="" disabled selected hidden>Driving Time</option>
-              <option value="0-3 hours">0-3 hours</option>
-              <option value="3-5 hours">3-5 hours</option>
-              <option value="5-8 hours">5-8 hours</option>
-              <option value="8-10 hours">8-10 hours</option>
-              <option value="More than 10 hours">More than 10 hours</option>
+              <option value="3">less than 3 hours</option>
+              <option value="5">less than 5 hours</option>
+              <option value="8">less than 8 hours</option>
+              <option value="10">less than 10 hours</option>
+              <option value="100">More than 10 hours</option>
             </select>
             
           </div>
           <div class="form-group form-hotel"> <!-- Hotel Options -->
-            <input type="checkbox" id="2-star" name="hotel_option" value="2-star">
+            <input type="checkbox" id="2-star" name="hotel_option" value="2">
             <label for="2-star">2-star</label>
-            <input type="checkbox" id="3-star" name="hotel_option" value="3-star">
+            <input type="checkbox" id="3-star" name="hotel_option" value="3">
             <label for="3-star">3-star</label>
-            <input type="checkbox" id="4-star" name="hotel_option" value="4-star">
+            <input type="checkbox" id="4-star" name="hotel_option" value="4">
             <label for="4-star">4-star</label>
-            <input type="checkbox" id="5-star" name="hotel_option" value="5-star">
+            <input type="checkbox" id="5-star" name="hotel_option" value="5">
             <label for="5-star">5-star</label>
           </div>
         
