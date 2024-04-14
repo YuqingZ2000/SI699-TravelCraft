@@ -320,8 +320,8 @@ h6,
   border-radius: 30px;
   border-radius: 10px;
   display: grid;
-  grid-template-columns: 15% 60% 25%;
-  column-gap: 8px;
+  grid-template-columns: 10% 60% 25%;
+  column-gap: 15px;
   row-gap: 3px;
 }
 
