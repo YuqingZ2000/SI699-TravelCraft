@@ -141,7 +141,7 @@
             </select>
           </div>
           <div class="form-group form-driving">  <!-- Driving Time -->
-            <select name="driving_time" class="form-control" id="driving_time">
+            <select name="driving_time" class="form-control" id="driving_time" >
               <option value="" disabled selected hidden>Driving Time</option>
               <option value="3">less than 3 hours</option>
               <option value="5">less than 5 hours</option>
@@ -178,7 +178,7 @@
   <section id = 'res' >
     <div id = "recommended-cities" class = 'container'>
       {% if recommended_cities %}
-      {% for city, description, rank in zip(recommended_cities, city_descriptions, city_rank) %} <!-- Updated! -->
+      {% for city, description, rank,pic in zip(recommended_cities, city_descriptions, city_rank,city_pic) %} <!-- Updated! -->
         <div class="city-card" id = 'city-card'>
           <p class="city-rank">{{ rank }}</p>  
           <p class="city-score">Score:</p>
@@ -186,7 +186,7 @@
           <p class="city-pop">Population:</p>
           <p class="city-hotel">Average [x-star] hotel price per night in [month]:</p>
           <p class="city-des">{{description}}</p>
-          <img class="city-img" src="../static/img/detroit.jpeg" alt="detroit"> <!-- Example -->
+          <img class="city-img" src="../{{pic}}" alt="{{city}}"> <!-- Example -->
         </div>
       {% endfor %}
       {% endif %}
