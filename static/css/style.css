@@ -349,7 +349,7 @@ h6,
   font-size: 25px;
   font-weight: bold;
 }
-#res #city-card .city-pop {
+#res #city-card .city-state {
   grid-area: 2 / 2 / 3 / 3;
 }
 #res #city-card .city-hotel {
@@ -474,7 +474,7 @@ footer {
   #res #city-card .city-title {
     grid-area: 1 / 2 / 2 / 3;
   }
-  #res #city-card .city-pop {
+  #res #city-card .city-state {
     grid-area: 4 / 2 / 5 / 3;
   }
   #res #city-card .city-hotel {
