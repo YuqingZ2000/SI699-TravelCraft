@@ -178,12 +178,12 @@
   <section id = 'res' >
     <div id = "recommended-cities" class = 'container'>
       {% if recommended_cities %}
-      {% for city, description, rank,pic in zip(recommended_cities, city_descriptions, city_rank,city_pic) %} <!-- Updated! -->
+      {% for city, description, rank, pic, state in zip(recommended_cities, city_descriptions, city_rank, city_pic, city_state) %} 
         <div class="city-card" id = 'city-card'>
           <p class="city-rank">{{ rank }}</p>  
-          <p class="city-score">Score:</p>
+          <!--<p class="city-score">Score:</p>-->
           <h2 class="city-title">{{city}}</h2>
-          <p class="city-pop">Population:</p>
+          <p class="city-state">State: {{state}}</p>
           <p class="city-hotel">Average [x-star] hotel price per night in [month]:</p>
           <p class="city-des">{{description}}</p>
           <img class="city-img" src="../{{pic}}" alt="{{city}}"> <!-- Example -->
