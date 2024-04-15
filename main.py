@@ -3,14 +3,11 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
-from flask import Flask, render_template, url_for, request, redirect
-
 from flask import Flask, request, render_template
 import pandas as pd
 from transformers import BertTokenizer, BertModel
 import torch
 from scipy.spatial.distance import cosine
-import pandas as pd
 import numpy as np
 
 # Load pre-trained model tokenizer and model
@@ -59,13 +56,15 @@ def read_form(city_descriptions = city_descriptions):
         hotel_option = data.getlist('hotel_option')
         if data['description']:
             keyword_embedding = get_embedding(data['description'])
-            city_embeddings['similarities'] = city_embeddings.apply(lambda x: 1 - cosine(keyword_embedding, x), axis=1)
-            top_city_idx = city_embeddings.sort_values('similarities',ascending = False)[:top_num].index.to_list()
-            top_cities = city_descriptions.loc[top_city_idx]
+            similarities = city_embeddings.apply(lambda x: 1 - cosine(keyword_embedding, x), axis=1)
+            top_city_idx = np.argsort(similarities)[-top_num:][::-1]
+            top_city_code = city_embeddings.iloc[top_city_idx].index.to_list()
+            top_cities = city_descriptions.loc[top_city_code]
         else:
             recommended_cities = None
             city_descriptions = None
             city_rank = None
+            city_pic = None
         if travel_method == 'Car':
             driving_time = int(data['driving_time'])
             selected_recommended_cities = city_distance[city_distance['source_code'].isin(departure_cities_code) &
@@ -78,13 +77,16 @@ def read_form(city_descriptions = city_descriptions):
             print(f'cities:{recommended_cities}')
             city_descriptions = selected_top_cities['description'].to_list()
             city_rank = [x for x in range(1,len(selected_top_cities)+1)]
+            city_pic = [f'static/img/city_img/{code}.jpg' for code in selected_top_cities.index.to_list()]
         else:
             recommended_cities = top_cities[:10]['city'].to_list()
             city_descriptions = top_cities[:10]['description'].to_list()
             city_rank = [x for x in range(1,11)]
+            city_pic = [f'static/img/city_img/{code}.jpg' for code in top_cities[:10].index.to_list()]
+
         return render_template('index.html', departure_list=departure_list,
                                 recommended_cities=recommended_cities, city_descriptions=city_descriptions,
-                                city_rank=city_rank,enumerate = enumerate,
+                                city_rank=city_rank,enumerate = enumerate,city_pic = city_pic,
                                 zip = zip)
 
     elif request.method == 'GET':
@@ -96,4 +98,3 @@ def read_form(city_descriptions = city_descriptions):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     app.run(port=8080,debug=True)
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
