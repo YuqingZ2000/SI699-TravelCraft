@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 
 <head>
   <meta charset="utf-8">
@@ -178,13 +178,18 @@
   <section id = 'res' >
     <div id = "recommended-cities" class = 'container'>
       {% if recommended_cities %}
-      {% for city, description, rank, pic, state in zip(recommended_cities, city_descriptions, city_rank, city_pic, city_state) %} 
+      {% for city, description, rank, pic, state,hotels in zip(recommended_cities, city_descriptions, city_rank, city_pic, city_state,cities_hotel_price) %}
         <div class="city-card" id = 'city-card'>
           <p class="city-rank">{{ rank }}</p>  
           <!--<p class="city-score">Score:</p>-->
           <h2 class="city-title">{{city}}</h2>
           <p class="city-state">State: {{state}}</p>
-          <p class="city-hotel">Average [x-star] hotel price per night in [month]:</p>
+          <p class = 'city-hotel'>
+          {% for k,v in hotels.items() %}
+            Average {{k}} star hotel price per night in {{departure_month}}:{{v}}</br>
+          {% endfor %}
+          </p>
+
           <p class="city-des">{{description}}</p>
           <img class="city-img" src="../{{pic}}" alt="{{city}}"> <!-- Example -->
         </div>

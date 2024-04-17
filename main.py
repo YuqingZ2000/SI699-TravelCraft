@@ -29,6 +29,8 @@ city_descriptions = pd.read_csv('static/data/merged_description_city_coded.csv',
 city_embeddings = pd.read_csv('static/data/city_embeddings.csv',index_col = 0)
 city_code = pd.read_csv('static/data/city_code.csv',index_col = 0)
 city_distance = pd.read_csv('static/data/distance_coded.csv',index_col = 0)
+hotel = pd.read_csv('static/data/hotel_city_coded.csv',index_col = 0)
+month_dic = {1:'Jan',2:'Feb',3:'Mar',4:'Apr',5:'May',6:'Jun',7:'Jul',8:'Aug',9:'Sep',10:'Oct',11:'Nov',12:'Dec'}
 app = Flask(__name__)
 
 
@@ -48,8 +50,10 @@ def read_form(city_descriptions = city_descriptions):
     # Get the form data as Python ImmutableDict datatype
     if request.method == 'POST':
         data = request.form
+        print(data)
         top_num = 25
         departure_date = data['departure_date']
+        departure_month = int(departure_date.split('-')[1])
         departure_cities = data.getlist('departureCity')
         departure_cities_code = departure_list[departure_list['city_state'].isin(departure_cities)]['code'].to_list()
         travel_method = data['travel_method']
@@ -80,16 +84,26 @@ def read_form(city_descriptions = city_descriptions):
             city_state = selected_top_cities['state'].to_list()
             city_pic = [f'static/img/city_img/{code}.jpg' for code in selected_top_cities.index.to_list()]
         else:
-            recommended_cities = top_cities[:10]['city'].to_list()
-            city_descriptions = top_cities[:10]['description'].to_list()
+            selected_top_cities =  top_cities[:10]
+            recommended_cities =selected_top_cities['city'].to_list()
+            city_descriptions = selected_top_cities['description'].to_list()
             city_rank = [x for x in range(1,11)]
-            city_state = top_cities[:10]['state'].to_list()
-            city_pic = [f'static/img/city_img/{code}.jpg' for code in top_cities[:10].index.to_list()]
+            city_state = selected_top_cities['state'].to_list()
+            city_pic = [f'static/img/city_img/{code}.jpg' for code in selected_top_cities.index.to_list()]
 
-        return render_template('index.html', departure_list=departure_list,
+        cities_hotel_price = []
+        for city_code in selected_top_cities.index:
+            city_hotel_price = {}
+            for star in hotel_option:
+                col_name = f'{month_dic[departure_month]}_{star}-star'
+                city_hotel_price[star] = hotel.loc[city_code][col_name]
+            print(city_hotel_price)
+            cities_hotel_price.append(city_hotel_price)
+
+        return render_template('index.html', departure_list=departure_list,cities_hotel_price = cities_hotel_price,
                                 recommended_cities = recommended_cities, city_descriptions = city_descriptions,
                                 city_rank = city_rank,enumerate = enumerate, city_pic = city_pic, 
-                                city_state = city_state, zip = zip)
+                                city_state = city_state, zip = zip,departure_month = month_dic[departure_month])
 
     elif request.method == 'GET':
         return render_template('index.html', departure_list=departure_list,
