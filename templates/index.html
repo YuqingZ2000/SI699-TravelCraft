@@ -178,11 +178,11 @@
   <section id = 'res' >
     <div id = "recommended-cities" class = 'container'>
       {% if recommended_cities %}
-      {% for city, description, rank, pic, state,hotels in zip(recommended_cities, city_descriptions, city_rank, city_pic, city_state,cities_hotel_price) %}
+      {% for city, description, rank, pic, state,hotels,url in zip(recommended_cities, city_descriptions, city_rank, city_pic, city_state,cities_hotel_price,city_url) %}
         <div class="city-card" id = 'city-card'>
           <p class="city-rank">{{ rank }}</p>  
           <!--<p class="city-score">Score:</p>-->
-          <h2 class="city-title">{{city}}</h2>
+          <h2 class="city-title"><a href="{{url}}">{{city}}</a> </h2>
           <p class="city-state">State: {{state}}</p>
           <p class = 'city-hotel'>
           {% for k,v in hotels.items() %}

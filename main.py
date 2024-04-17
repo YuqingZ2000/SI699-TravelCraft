@@ -78,11 +78,11 @@ def read_form(city_descriptions = city_descriptions):
             selected_recommenede_cities = selected_recommended_cities[selected_recommended_cities['source_code']==len(departure_cities_code)].index
             selected_top_cities = top_cities.loc[selected_recommenede_cities]
             recommended_cities = selected_top_cities['city'].to_list()
-            print(f'cities:{recommended_cities}')
             city_descriptions = selected_top_cities['description'].to_list()
             city_rank = [x for x in range(1,len(selected_top_cities)+1)]
             city_state = selected_top_cities['state'].to_list()
             city_pic = [f'static/img/city_img/{code}.jpg' for code in selected_top_cities.index.to_list()]
+            city_url = selected_top_cities['URL'].to_list()
         else:
             selected_top_cities =  top_cities[:10]
             recommended_cities =selected_top_cities['city'].to_list()
@@ -90,6 +90,7 @@ def read_form(city_descriptions = city_descriptions):
             city_rank = [x for x in range(1,11)]
             city_state = selected_top_cities['state'].to_list()
             city_pic = [f'static/img/city_img/{code}.jpg' for code in selected_top_cities.index.to_list()]
+            city_url = selected_top_cities['URL'].to_list()
 
         cities_hotel_price = []
         for city_code in selected_top_cities.index:
@@ -103,7 +104,8 @@ def read_form(city_descriptions = city_descriptions):
         return render_template('index.html', departure_list=departure_list,cities_hotel_price = cities_hotel_price,
                                 recommended_cities = recommended_cities, city_descriptions = city_descriptions,
                                 city_rank = city_rank,enumerate = enumerate, city_pic = city_pic, 
-                                city_state = city_state, zip = zip,departure_month = month_dic[departure_month])
+                                city_state = city_state, zip = zip,departure_month = month_dic[departure_month],
+                               city_url = city_url)
 
     elif request.method == 'GET':
         return render_template('index.html', departure_list=departure_list,
