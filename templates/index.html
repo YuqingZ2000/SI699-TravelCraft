@@ -183,10 +183,10 @@
           <p class="city-rank">{{ rank }}</p>  
           <!--<p class="city-score">Score:</p>-->
           <h2 class="city-title"><a href="{{url}}">{{city}}</a> </h2>
-          <p class="city-state">State: {{state}}</p>
+          <p class="city-state"><strong>State:</strong> {{state}}</p>
           <p class = 'city-hotel'>
           {% for k,v in hotels.items() %}
-            Average {{k}} star hotel price per night in {{departure_month}}: {{v}}</br>
+            Average <strong>{{k}} star</strong> hotel price per night in <strong>{{departure_month}}</strong>: {{v}}</br>
           {% endfor %}
           </p>
 
