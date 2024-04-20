@@ -58,6 +58,7 @@ def read_form(city_descriptions = city_descriptions):
         departure_cities_code = departure_list[departure_list['city_state'].isin(departure_cities)]['code'].to_list()
         travel_method = data['travel_method']
         hotel_option = data.getlist('hotel_option')
+        no_res = False
         if data['description']:
             keyword_embedding = get_embedding(data['description'])
             similarities = city_embeddings.apply(lambda x: 1 - cosine(keyword_embedding, x), axis=1)
