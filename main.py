@@ -41,7 +41,7 @@ app = Flask(__name__)
 def index():
     ## Display the HTML form template
     return render_template('index.html',departure_list = departure_list,
-                           recommended_cities = None,city_descriptions = None,zip = zip)
+                           recommended_cities = None,city_descriptions = None,zip = zip,no_res = None)
 
 
 # `read-form` endpoint
@@ -69,6 +69,7 @@ def read_form(city_descriptions = city_descriptions):
             city_descriptions = None
             city_rank = None
             city_pic = None
+            no_res = True
         if travel_method == 'Car':
             driving_time = int(data['driving_time'])
             selected_recommended_cities = city_distance[city_distance['source_code'].isin(departure_cities_code) &
@@ -100,16 +101,17 @@ def read_form(city_descriptions = city_descriptions):
                 city_hotel_price[star] = hotel.loc[city_code][col_name]
             print(city_hotel_price)
             cities_hotel_price.append(city_hotel_price)
-
+        if len(recommended_cities) == 0:
+            no_res = True
         return render_template('index.html', departure_list=departure_list,cities_hotel_price = cities_hotel_price,
                                 recommended_cities = recommended_cities, city_descriptions = city_descriptions,
                                 city_rank = city_rank,enumerate = enumerate, city_pic = city_pic, 
                                 city_state = city_state, zip = zip,departure_month = month_dic[departure_month],
-                               city_url = city_url)
+                               city_url = city_url,no_res = no_res)
 
     elif request.method == 'GET':
         return render_template('index.html', departure_list=departure_list,
-                               recommended_cities=None, city_descriptions=None, zip=zip)
+                               recommended_cities=None, city_descriptions=None, zip=zip,no_res = None)
 
 
 

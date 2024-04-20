@@ -194,7 +194,8 @@
           <img class="city-img" src="../{{pic}}" alt="{{city}}"> <!-- Example -->
         </div>
       {% endfor %}
-      {% else %}
+      {% endif %}
+      {% if no_res %}
       <div class = "no-res" id = 'no-res'>
         <h2> No recommended cities available at the moment. </h2>
         <h2> Please consider adjusting your preferences and try again later.</h2>
