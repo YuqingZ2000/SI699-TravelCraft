@@ -9,19 +9,21 @@ from transformers import BertTokenizer, BertModel
 import torch
 from scipy.spatial.distance import cosine
 import numpy as np
+from sentence_transformers import SentenceTransformer
 
 # Load pre-trained model tokenizer and model
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-model = BertModel.from_pretrained('bert-base-uncased')
-
+# tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+# model = BertModel.from_pretrained('bert-base-uncased')
+model = SentenceTransformer("all-MiniLM-L6-v2")
 # Function to generate embeddings
 def get_embedding(text):
-    tokens = tokenizer(text, return_tensors='pt', padding=True, truncation=True, max_length=512)
-    with torch.no_grad():
-        outputs = model(**tokens)
-    # Use the average of the last hidden states as the embedding
-    embeddings = outputs.last_hidden_state.mean(dim=1).squeeze().numpy()
-    return embeddings
+    # tokens = tokenizer(text, return_tensors='pt', padding=True, truncation=True, max_length=512)
+    # with torch.no_grad():
+    #     outputs = model(**tokens)
+    # # Use the average of the last hidden states as the embedding
+    # embeddings = outputs.last_hidden_state.mean(dim=1).squeeze().numpy()
+    embedding = model.encode([text])[0]
+    return embedding
 
 
 departure_list = pd.read_csv('static/data/US_cities_latlng.csv')
@@ -58,7 +60,7 @@ def read_form(city_descriptions = city_descriptions):
         departure_cities_code = departure_list[departure_list['city_state'].isin(departure_cities)]['code'].to_list()
         travel_method = data['travel_method']
         hotel_option = data.getlist('hotel_option')
-        no_res = False
+        no_res = None
         if data['description']:
             keyword_embedding = get_embedding(data['description'])
             similarities = city_embeddings.apply(lambda x: 1 - cosine(keyword_embedding, x), axis=1)
